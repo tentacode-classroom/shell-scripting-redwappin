@@ -1,22 +1,28 @@
-
+CURRENT_DIRECTORY=`dirname $0`
+echo current : $CURRENT_DIRECTORY
 #Ranger mes fichiers
-rm -Rf ./bazar_clean
+rm -Rf $CURRENT_DIRECTORY/../bazar_clean
 
-mkdir -p ./bazar_clean/images ./bazar_clean/divers ./bazar_clean/videos 
-mkdir -p ./bazar_clean/images/{2017..2018}/{1..12}
+mkdir -p  $CURRENT_DIRECTORY/../bazar_clean/images  $CURRENT_DIRECTORY/../bazar_clean/divers  $CURRENT_DIRECTORY/../bazar_clean/videos 
+mkdir -p  $CURRENT_DIRECTORY/../bazar_clean/images/{2017..2018}/{1..12}
 
-FILES= find ./bazar -type f 
-
+FILES=`find $CURRENT_DIRECTORY/../bazar -type f`
 for FILE in $FILES
 do
-    if [ $FILE | grep image = 0 ]
+    file $FILE | grep "image data" 
+    IS_IMAGE=$?
+
+    file $FILE | grep "video data"
+    IS_VIDEO=$?
+
+    if [ $IS_IMAGE = 0 ]
     then
-      cp $FILE ./bazar_clean/images
-    elif [ $FILE | grep video = 0 ]
+      cp $FILE $CURRENT_DIRECTORY/../bazar_clean/images
+    elif [ $IS_VIDEO = 0 ]
     then
-      cp $FILE ./bazar_clean/videos
+      cp $FILE $CURRENT_DIRECTORY/../bazar_clean/videos
     else
-      cp $FILE ./bazar_clean/divers 
+      cp $FILE $CURRENT_DIRECTORY/../bazar_clean/divers 
     fi
 done
 
